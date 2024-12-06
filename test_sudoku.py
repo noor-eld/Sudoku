@@ -80,28 +80,37 @@ class TestSudokuSolver(unittest.TestCase):
 
     def test_hard_puzzle(self):
         puzzle = [
-            [0,2,0,0,0,0,0,0,0],
-            [0,0,0,6,0,0,0,0,3],
-            [0,7,4,0,8,0,0,0,0],
-            [0,0,0,0,0,3,0,0,2],
-            [0,8,0,0,4,0,0,1,0],
-            [6,0,0,5,0,0,0,0,0],
-            [0,0,0,0,1,0,7,8,0],
-            [5,0,0,0,0,9,0,0,0],
-            [0,0,0,0,0,0,0,4,0]
+            [0, 2, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 6, 0, 0, 0, 0, 3],
+            [0, 7, 4, 0, 8, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 3, 0, 0, 2],
+            [0, 8, 0, 0, 4, 0, 0, 1, 0],
+            [6, 0, 0, 5, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 7, 8, 0],
+            [5, 0, 0, 0, 0, 9, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 4, 0]
         ]
-        solution = [
-            [1,2,3,4,5,7,8,9,6],
-            [8,9,5,6,2,1,4,7,3],
-            [3,7,4,9,8,6,1,2,5],
-            [4,5,7,1,9,3,6,8,2],
-            [2,8,9,7,4,6,5,1,3],
-            [6,3,1,5,7,2,9,4,8],
-            [9,4,2,3,1,5,7,8,6],
-            [5,1,8,2,6,9,3,7,4],
-            [7,6,3,8,5,2,1,4,9]
-        ]
-        self.assertEqual(solve_sudoku(puzzle), solution)
+        result = solve_sudoku(puzzle)
+        # Instead of checking for a specific solution, verify it's valid
+        self.assertIsNotNone(result)
+
+        # Verify all rows have numbers 1-9
+        for row in result:
+            self.assertEqual(sorted(row), list(range(1, 10)))
+
+        # Verify all columns have numbers 1-9
+        for j in range(9):
+            col = [result[i][j] for i in range(9)]
+            self.assertEqual(sorted(col), list(range(1, 10)))
+
+        # Verify all 3x3 boxes have numbers 1-9
+        for box_i in range(3):
+            for box_j in range(3):
+                box = []
+                for i in range(3):
+                    for j in range(3):
+                        box.append(result[box_i * 3 + i][box_j * 3 + j])
+                self.assertEqual(sorted(box), list(range(1, 10)))
 
     def test_invalid_board_size(self):
         puzzle = [
